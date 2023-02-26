@@ -1,0 +1,10 @@
+#!/bin/bash
+# Glorious hack script that restores changed keybinds in tmux
+
+until ! tmux list-window -a | grep -qs CHT ; do
+    sleep 1
+done
+tmux bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel 'xclip -in -selection clipboard'
+tmux bind -T copy-mode-vi q send-keys -X cancel
+tmux kill-session -t sacrifice
+
