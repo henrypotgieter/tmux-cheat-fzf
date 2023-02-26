@@ -1,5 +1,7 @@
 # Tmux Cheat.sh FZF Script
 
+![Example](https://github.com/henrypotgieter/tmux-cheat-fzf/blob/main/example.png?raw=true)
+
 This is my take on implementing a means of easily accessing cheat.sh from
 inside tmux, dumping you into a fresh window already in copy mode so you can
 highlight any text you want to yank.
