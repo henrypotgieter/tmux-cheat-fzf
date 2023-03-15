@@ -20,7 +20,8 @@ Feel free to adjust any of this as you see fit.
 ```
 mkdir ~/.tmux/scripts/
 git clone https://github.com/henrypotgieter/tmux-cheat-fzf.git ~/.tmux/scripts/cheat
-chmod a+x ~/.tmux/scripts/cheat/*
+chmod a+x ~/.tmux/scripts/cheat/cht.sh
+chmod a+x ~/.tmux/scripts/cheat/thesacrifice
 echo -e '# FZF cht popup\nbind C-c display-popup -E -T "┨ Cheat.SH Lookup ┠" -S "fg=colour46" -h "70%" "~/.tmux/scripts/cheat/cht.sh"' >> ~/.tmux.conf
 ```
 
