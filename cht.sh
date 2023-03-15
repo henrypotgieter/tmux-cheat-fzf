@@ -38,7 +38,7 @@ postproc() {
 if echo $languages | grep -qs $selected ; then
     read -p "CHT.sh Query of language ${selected} (blank for summary): " query
     # If nothing is provided just get <language>/:learn from cht.sh, otherwise fire in the query data
-    if [ -n $query ]; then
+    if [ -v $query ]; then
         tmux neww -n 'CHT' bash -c "curl 'cht.sh/$selected/:learn' & while [ : ] ; do sleep 1 ; done"
     else
         tmux neww -n 'CHT' bash -c "curl cht.sh/$selected/`echo $query | tr ' ' '+'` & while [ : ] ; do sleep 1 ; done"
@@ -46,7 +46,7 @@ if echo $languages | grep -qs $selected ; then
 # Otherwise check if we're looking at a command
 elif echo $commands | grep -qs $selected ; then
     read -p "CHT.sh Query of command ${selected}: " query
-    if [ -n $query ] ; then
+    if [ -v $query ] ; then
         tmux neww -n 'CHT' bash -c "curl cht.sh/$selected & while [ : ] ; do sleep 1 ; done"
     else
         tmux neww -n 'CHT' bash -c "curl cht.sh/$selected~$query & while [ : ] ; do sleep 1 ; done"
