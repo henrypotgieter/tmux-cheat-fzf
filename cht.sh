@@ -43,6 +43,7 @@ if echo $languages | grep -qs $selected ; then
     else
         tmux neww -n 'CHT' bash -c "curl cht.sh/$selected/`echo $query | tr ' ' '+'` & while [ : ] ; do sleep 1 ; done"
     fi
+    postproc
 # Otherwise check if we're looking at a command
 elif echo $commands | grep -qs $selected ; then
     read -p "CHT.sh Query of command ${selected}: " query
