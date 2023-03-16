@@ -2,9 +2,6 @@
 #
 # Script for using fzf in TMUX to access cheat.sh contents easily
 
-# Default location of sacrifice script (change as needed)
-THESACRIFICE="~/.tmux/scripts/cheat/thesacrifice"
-
 # Define some languages and commands
 languages=$(echo "bash golang lua python php ruby" | tr ' ' '\n')
 commands=$(echo "split tar cut tmux awk zip unzip sed find ps lvm yum apt" | tr ' ' '\n')
@@ -13,7 +10,7 @@ commands=$(echo "split tar cut tmux awk zip unzip sed find ps lvm yum apt" | tr 
 direct=$(echo "RAW HELP" | tr ' ' '\n')
 
 # Drive it all into fzf
-selected=$(printf "$languages\n$commands\n$direct" | sort | fzf)
+selected=$(printf "%s\n%s\n%s" "$languages" "$commands" "$direct" | sort | fzf)
 
 # Postprocessing fun
 postproc() {
@@ -31,12 +28,12 @@ postproc() {
 	# This is fugly, but it works... create a sacraficial session that we will use to trigger restoration of normal
 	# copy-mode-vi key binds, this cleans itself up after the CHT window is closed in tmux
 	tmux new-session -d -s sacrifice
-	tmux neww -d -t sacrifice: '${THESACRIFICE}; tmux wait -S thesacrifice'
+	tmux neww -d -t sacrifice "$HOME/.tmux/scripts/cheat/thesacrifice; tmux wait -S thesacrifice"
 }
 
 # Check if we're looking for a language
 if echo "$languages" | grep -qs "$selected"; then
-	read -p "CHT.sh Query of language ${selected} (blank for summary): " query
+	read -r -p "CHT.sh Query of language ${selected} (blank for summary): " query
 	# If nothing is provided just get <language>/:learn from cht.sh, otherwise fire in the query data
 	if [ -v "$query" ]; then
 		tmux neww -n 'CHT' bash -c "curl 'cht.sh/$selected/:learn' & while [ : ] ; do sleep 1 ; done"
@@ -46,7 +43,7 @@ if echo "$languages" | grep -qs "$selected"; then
 	postproc
 # Otherwise check if we're looking at a command
 elif echo "$commands" | grep -qs "$selected"; then
-	read -p "CHT.sh Query of command ${selected}: " query
+	read -r -p "CHT.sh Query of command ${selected}: " query
 	if [ -v "$query" ]; then
 		tmux neww -n 'CHT' bash -c "curl cht.sh/$selected & while [ : ] ; do sleep 1 ; done"
 	else
@@ -58,7 +55,7 @@ else
 	if [ "$selected" == "HELP" ]; then
 		tmux neww -n 'CHT' bash -c "curl cht.sh/:help & while [ : ] ; do sleep 1 ; done"
 	else
-		read -p "CHT.sh raw query: " query
+		read -r -p "CHT.sh raw query: " query
 		tmux neww -n 'CHT' bash -c "curl cht.sh/$query & while [ : ] ; do sleep 1 ; done"
 	fi
 	postproc
